@@ -27,7 +27,8 @@ class TourList extends React.Component {
         this.props.navigator.push({
             title: tour.name,
             component: TourDetail,
-            passProps: { tour }
+            passProps: { tour },
+            rightButtonIcon: require('./images/ios7-location-outline.png'),
         });
     }
 
@@ -96,12 +97,11 @@ class yesteryearNative extends React.Component {
         if (!this.state.loaded) {
             return this.renderLoadingView();
         }
-
         return (
             <NavigatorIOS ref="nav" style={styles.wrapper} initialRoute={{
                 component: TourList,
                 title: 'Tours',
-                rightButtonTitle: 'Map',
+                rightButtonIcon: require('./images/ios7-location-outline.png'),
                 passProps: { dataSource: this.state.dataSource },
                 }}
             />
@@ -113,7 +113,6 @@ class TourDetail extends React.Component {
 
     constructor() {
         super();
-
         this.state = {
             dataSource: new ListView.DataSource({
                 rowHasChanged: (r1, r2) => r1 !== r2
@@ -189,6 +188,9 @@ let styles = StyleSheet.create({
   },
   tourItemSubtitle: {
     textAlign: 'center'
+  },
+  mapIcon: {
+      width: 10
   },
   backDrop: {
     marginTop: 10,
