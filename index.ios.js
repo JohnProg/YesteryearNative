@@ -6,7 +6,9 @@ const {
   StyleSheet,
   Text,
   View,
-  ListView
+  ListView,
+  NavigatorIOS,
+  TouchableHighlight
 } = React;
 
 import Firebase from 'firebase';
@@ -14,6 +16,38 @@ import Rebase from 're-base';
 
 const ref = new Firebase('https://hey-day-tours.firebaseio.com/');
 const base = Rebase.createClass('https://hey-day-tours.firebaseio.com/');
+
+class TourList extends React.Component {
+    onPress() {
+        this.props.navigator.push({
+            title: 'A tour detail view',
+            component: TourDetail
+        });
+    }
+
+    renderTour(tour) {
+        return (
+          <View style={styles.listItemContainer}>
+              <TouchableHighlight onPress={this.onPress} style={styles.backDrop}>
+                  <Image source={{uri: tour.image}} style={styles.backDropImage}>
+                    <View style={styles.backdropView}>
+                        <Text style={styles.title}>{tour.name}</Text>
+                    </View>
+                  </Image>
+              </TouchableHighlight>
+          </View>
+        );
+    }
+
+    render() {
+        return (
+            <ListView
+                dataSource={this.props.dataSource}
+                renderRow={this.renderTour}
+            />
+        )
+    }
+}
 
 class yesteryearNative extends React.Component {
 
@@ -54,29 +88,28 @@ class yesteryearNative extends React.Component {
         );
     }
 
-    renderTour(tour) {
-        return (
-          <View style={styles.listItemContainer}>
-            <Image source={{uri: tour.image}} style={styles.backDrop}>
-              <View style={styles.backdropView}>
-                  <Text style={styles.title}>{tour.name}</Text>
-              </View>
-            </Image>
-          </View>
-        );
-    }
-
     render() {
         if (!this.state.loaded) {
             return this.renderLoadingView();
         }
 
         return (
-            <ListView
-                dataSource={this.state.dataSource}
-                renderRow={this.renderTour}
-                style={styles.listView}
+            <NavigatorIOS ref="nav" style={styles.wrapper} initialRoute={{
+                component: TourList,
+                title: 'Tours',
+                rightButtonTitle: 'Map',
+                passProps: { dataSource: this.state.dataSource },
+            }}
             />
+        )
+    }
+}
+
+class TourDetail extends React.Component {
+    render() {
+        console.log("tour detail happening");
+        return (
+            <Text>I'm here</Text>
         )
     }
 }
@@ -88,7 +121,6 @@ let styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    textAlign: 'center'
   },
   listItemContainer: {
     alignItems: 'center',
@@ -97,36 +129,40 @@ let styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     marginBottom: 10
-  },
-  loadingText: {
-    textAlign: 'center'
-  },
-  listView: {
-    paddingTop: 20
-  },
+},
   backdropView: {
+    alignSelf: 'stretch',
     backgroundColor: 'rgba(0,0,0,0)',
-    height: 120
+    height: 120,
+    marginTop: 40
   },
   title: {
     backgroundColor: 'rgba(0,0,0,0)',
     color: 'white',
-    fontSize: 20,
+    fontSize: 30,
     shadowOffset:{
-            width: 0,
-            height: 1,
+        width: 0,
+        height: 1,
     },
+    fontWeight: "bold",
     shadowColor: 'black',
     shadowOpacity: 1.0,
     textAlign: 'center'
   },
   tourItemSubtitle: {
-    backgroundColor: 'rgba(0,0,0,0)',
     textAlign: 'center'
   },
   backDrop: {
-    paddingTop: 60,
-    alignSelf: 'stretch'
+    marginTop: 10,
+    alignSelf: 'stretch',
+    height: 120
+  },
+  backDropImage: {
+    alignSelf: 'stretch',
+    height: 120
+  },
+  wrapper: {
+      flex: 1
   }
 });
 
