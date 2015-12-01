@@ -47,7 +47,7 @@ class yesteryearNative extends React.Component {
     renderLoadingView() {
         return (
           <View style={styles.container}>
-            <Text>
+            <Text style={styles.loadingText}>
               Getting tours...
             </Text>
           </View>
@@ -56,15 +56,12 @@ class yesteryearNative extends React.Component {
 
     renderTour(tour) {
         return (
-          <View style={styles.container}>
-            <Image
-              source={{uri: tour.image}}
-              style={styles.thumbnail}
-            />
-            <View style={styles.rightContainer}>
-              <Text style={styles.title}>{tour.title}</Text>
-              <Text style={styles.year}>{tour.description}</Text>
-            </View>
+          <View style={styles.listItemContainer}>
+            <Image source={{uri: tour.image}} style={styles.backDrop}>
+              <View style={styles.backdropView}>
+                  <Text style={styles.title}>{tour.name}</Text>
+              </View>
+            </Image>
           </View>
         );
     }
@@ -86,35 +83,50 @@ class yesteryearNative extends React.Component {
 
 let styles = StyleSheet.create({
   container: {
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
+    textAlign: 'center'
+  },
+  listItemContainer: {
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    marginBottom: 10
   },
-  rightContainer: {
-    flex: 1
+  loadingText: {
+    textAlign: 'center'
   },
   listView: {
-    paddingTop: 20,
-    backgroundColor: '#F5FCFF',
+    paddingTop: 20
+  },
+  backdropView: {
+    backgroundColor: 'rgba(0,0,0,0)',
+    height: 120
   },
   title: {
+    backgroundColor: 'rgba(0,0,0,0)',
+    color: 'white',
     fontSize: 20,
-    marginBottom: 8,
+    shadowOffset:{
+            width: 0,
+            height: 1,
+    },
+    shadowColor: 'black',
+    shadowOpacity: 1.0,
     textAlign: 'center'
   },
-  year: {
+  tourItemSubtitle: {
+    backgroundColor: 'rgba(0,0,0,0)',
     textAlign: 'center'
-},
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
   },
-  thumbnail: {
-    width: 100,
-    height: 100,
+  backDrop: {
+    paddingTop: 60,
+    alignSelf: 'stretch'
   }
 });
 
