@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
-'use strict';
-
 import React from 'react-native';
 
 const {
@@ -15,9 +9,11 @@ const {
   ListView
 } = React;
 
-let MOCKED_MOVIES_DATA = [
-  {title: 'Star Wars', year: '2015', posters: {thumbnail: 'http://i.imgur.com/UePbdph.jpg'}},
-];
+import Firebase from 'firebase';
+import Rebase from 're-base';
+
+const ref = new Firebase('https://hey-day-tours.firebaseio.com/');
+const base = Rebase.createClass('https://hey-day-tours.firebaseio.com/');
 
 let REQUEST_URL = 'https://raw.githubusercontent.com/facebook/react-native/master/docs/MoviesExample.json';
 
@@ -29,7 +25,9 @@ class yesteryearNative extends React.Component {
             dataSource: new ListView.DataSource({
                 rowHasChanged: (row1, row2) => row1 !== row2
             }),
-            loaded: false
+            loaded: false,
+            userData : {},
+            tours : {}
         };
     }
 
@@ -38,22 +36,36 @@ class yesteryearNative extends React.Component {
     }
 
     fetchData() {
-        fetch(REQUEST_URL)
-            .then((response) => response.json())
-            .then((responseData) => {
+        // fetch(REQUEST_URL)
+        //     .then((response) => response.json())
+        //     .then((responseData) => {
+        //         this.setState({
+        //             dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
+        //             loaded: true
+        //         });
+        //     })
+        //     .done();
+
+        let toursEndpoint = 'tours/';
+        base.fetch(toursEndpoint, {
+            context: this,
+            then(data) {
+                console.log(data);
                 this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
-                    loaded: true
-                });
-            })
-            .done();
+                  tours : data,
+                  loaded: true
+                  }
+                )}
+          });
+        console.log(this.state);
+
     }
 
     renderLoadingView() {
         return (
           <View style={styles.container}>
             <Text>
-              Loading movies...
+              Getting tours...
             </Text>
           </View>
         );
