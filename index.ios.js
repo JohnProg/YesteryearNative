@@ -18,7 +18,12 @@ const ref = new Firebase('https://hey-day-tours.firebaseio.com/');
 const base = Rebase.createClass('https://hey-day-tours.firebaseio.com/');
 
 class TourList extends React.Component {
-    onPress() {
+
+    constructor() {
+        super();
+    }
+
+    goToDetail() {
         this.props.navigator.push({
             title: 'A tour detail view',
             component: TourDetail
@@ -26,24 +31,24 @@ class TourList extends React.Component {
     }
 
     renderTour(tour) {
+        console.log(this);
         return (
-          <View style={styles.listItemContainer}>
-              <TouchableHighlight onPress={this.onPress} style={styles.backDrop}>
+              <TouchableHighlight onPress={this.goToDetail.bind(this)} style={styles.backDrop, styles.listItemContainer}>
                   <Image source={{uri: tour.image}} style={styles.backDropImage}>
                     <View style={styles.backdropView}>
                         <Text style={styles.title}>{tour.name}</Text>
                     </View>
                   </Image>
               </TouchableHighlight>
-          </View>
-        );
+        )
     }
 
     render() {
+        console.log(this);
         return (
             <ListView
                 dataSource={this.props.dataSource}
-                renderRow={this.renderTour}
+                renderRow={this.renderTour.bind(this)}
             />
         )
     }
