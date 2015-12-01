@@ -23,17 +23,17 @@ class TourList extends React.Component {
         super();
     }
 
-    goToDetail() {
+    goToDetail(tour) {
         this.props.navigator.push({
-            title: 'A tour detail view',
-            component: TourDetail
+            title: tour.name,
+            component: TourDetail,
+            passProps: { tour }
         });
     }
 
     renderTour(tour) {
-        console.log(this);
         return (
-              <TouchableHighlight onPress={this.goToDetail.bind(this)} style={styles.backDrop, styles.listItemContainer}>
+              <TouchableHighlight onPress={this.goToDetail.bind(this, tour)} style={styles.backDrop, styles.listItemContainer}>
                   <Image source={{uri: tour.image}} style={styles.backDropImage}>
                     <View style={styles.backdropView}>
                         <Text style={styles.title}>{tour.name}</Text>
@@ -44,7 +44,6 @@ class TourList extends React.Component {
     }
 
     render() {
-        console.log(this);
         return (
             <ListView
                 dataSource={this.props.dataSource}
@@ -111,10 +110,14 @@ class yesteryearNative extends React.Component {
 }
 
 class TourDetail extends React.Component {
+
     render() {
-        console.log("tour detail happening");
         return (
-            <Text>I'm here</Text>
+            <View style={styles.container}>
+              <Text style={styles.loadingText}>
+                {this.props.tour.image}
+              </Text>
+            </View>
         )
     }
 }
@@ -126,6 +129,10 @@ let styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
+  },
+  tourDetail: {
+    marginTop: 50,
+    color: 'black'
   },
   listItemContainer: {
     alignItems: 'center',
