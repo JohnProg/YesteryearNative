@@ -15,19 +15,15 @@ import Rebase from 're-base';
 const ref = new Firebase('https://hey-day-tours.firebaseio.com/');
 const base = Rebase.createClass('https://hey-day-tours.firebaseio.com/');
 
-let REQUEST_URL = 'https://raw.githubusercontent.com/facebook/react-native/master/docs/MoviesExample.json';
-
 class yesteryearNative extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             dataSource: new ListView.DataSource({
-                rowHasChanged: (row1, row2) => row1 !== row2
+                rowHasChanged: (row1, row2) => row1 !== row2,
             }),
-            loaded: false,
-            userData : {},
-            tours : {}
+            loaded: false
         };
     }
 
@@ -36,29 +32,16 @@ class yesteryearNative extends React.Component {
     }
 
     fetchData() {
-        // fetch(REQUEST_URL)
-        //     .then((response) => response.json())
-        //     .then((responseData) => {
-        //         this.setState({
-        //             dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
-        //             loaded: true
-        //         });
-        //     })
-        //     .done();
-
         let toursEndpoint = 'tours/';
         base.fetch(toursEndpoint, {
             context: this,
             then(data) {
-                console.log(data);
                 this.setState({
-                  tours : data,
+                  dataSource: this.state.dataSource.cloneWithRows(data),
                   loaded: true
-                  }
-                )}
-          });
-        console.log(this.state);
-
+                })
+            }
+        });
     }
 
     renderLoadingView() {
@@ -71,16 +54,16 @@ class yesteryearNative extends React.Component {
         );
     }
 
-    renderMovie(movie) {
+    renderTour(tour) {
         return (
           <View style={styles.container}>
             <Image
-              source={{uri: movie.posters.thumbnail}}
+              source={{uri: tour.image}}
               style={styles.thumbnail}
             />
             <View style={styles.rightContainer}>
-              <Text style={styles.title}>{movie.title}</Text>
-              <Text style={styles.year}>{movie.year}</Text>
+              <Text style={styles.title}>{tour.title}</Text>
+              <Text style={styles.year}>{tour.description}</Text>
             </View>
           </View>
         );
@@ -94,7 +77,7 @@ class yesteryearNative extends React.Component {
         return (
             <ListView
                 dataSource={this.state.dataSource}
-                renderRow={this.renderMovie}
+                renderRow={this.renderTour}
                 style={styles.listView}
             />
         )
@@ -123,12 +106,7 @@ let styles = StyleSheet.create({
   },
   year: {
     textAlign: 'center'
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
+},
   instructions: {
     textAlign: 'center',
     color: '#333333',
