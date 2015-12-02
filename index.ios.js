@@ -14,6 +14,9 @@ const {
 import Firebase from 'firebase';
 import Rebase from 're-base';
 
+import styles from './ios_components/Styles';
+import TourDetail from './ios_components/TourDetail';
+
 const ref = new Firebase('https://hey-day-tours.firebaseio.com/');
 const base = Rebase.createClass('https://hey-day-tours.firebaseio.com/');
 
@@ -28,7 +31,7 @@ class TourList extends React.Component {
             title: tour.name,
             component: TourDetail,
             passProps: { tour },
-            rightButtonIcon: require('./images/ios7-location-outline.png'),
+            rightButtonIcon: require('./images/ios7-location-outline.png')
         });
     }
 
@@ -109,101 +112,13 @@ class yesteryearNative extends React.Component {
     }
 }
 
-class TourDetail extends React.Component {
 
-    constructor() {
-        super();
-        this.state = {
-            dataSource: new ListView.DataSource({
-                rowHasChanged: (r1, r2) => r1 !== r2
-            })
-        }
-    }
-    componentDidMount() {
-        this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(this.props.tour.stops)
-        })
-    }
 
-    renderStop(stop) {
-        return (
-            <TouchableHighlight style={styles.backDrop, styles.listItemContainer}>
-                <Image source={{uri: stop.image}} style={styles.backDropImage}>
-                  <View style={styles.backdropView}>
-                      <Text style={styles.title}>{stop.name}</Text>
-                  </View>
-                </Image>
-            </TouchableHighlight>
-        )
+let stylesTourDetail = StyleSheet.create({
+    heroImg: {
+        alignSelf: 'stretch',
+        height: 200
     }
-
-    render() {
-        return (
-            <ListView
-                dataSource={this.state.dataSource}
-                renderRow={this.renderStop.bind(this)}
-            />
-        )
-    }
-}
-
-let styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  tourDetail: {
-    marginTop: 50,
-    color: 'black'
-  },
-  listItemContainer: {
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    marginBottom: 10
-},
-  backdropView: {
-    alignSelf: 'stretch',
-    backgroundColor: 'rgba(0,0,0,0)',
-    height: 120,
-    marginTop: 40
-  },
-  title: {
-    backgroundColor: 'rgba(0,0,0,0)',
-    color: 'white',
-    fontSize: 30,
-    shadowOffset:{
-        width: 0,
-        height: 1,
-    },
-    fontWeight: "bold",
-    shadowColor: 'black',
-    shadowOpacity: 1.0,
-    textAlign: 'center'
-  },
-  tourItemSubtitle: {
-    textAlign: 'center'
-  },
-  mapIcon: {
-      width: 10
-  },
-  backDrop: {
-    marginTop: 10,
-    alignSelf: 'stretch',
-    height: 120
-  },
-  backDropImage: {
-    alignSelf: 'stretch',
-    height: 120
-  },
-  wrapper: {
-      flex: 1
-  }
-});
+})
 
 AppRegistry.registerComponent('yesteryearNative', () => yesteryearNative);
