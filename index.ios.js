@@ -15,49 +15,12 @@ import Firebase from 'firebase';
 import Rebase from 're-base';
 
 import styles from './ios_components/Styles';
-import TourDetail from './ios_components/TourDetail';
+import TourList from './ios_components/TourList';
 
 const ref = new Firebase('https://hey-day-tours.firebaseio.com/');
 const base = Rebase.createClass('https://hey-day-tours.firebaseio.com/');
 
-class TourList extends React.Component {
-
-    constructor() {
-        super();
-    }
-
-    goToDetail(tour) {
-        this.props.navigator.push({
-            title: tour.name,
-            component: TourDetail,
-            passProps: { tour },
-            rightButtonIcon: require('./images/ios7-location-outline.png')
-        });
-    }
-
-    renderTour(tour) {
-        return (
-              <TouchableHighlight onPress={this.goToDetail.bind(this, tour)} style={styles.backDrop, styles.listItemContainer}>
-                  <Image source={{uri: tour.image}} style={styles.backDropImage}>
-                    <View style={styles.backdropView}>
-                        <Text style={styles.title}>{tour.name}</Text>
-                    </View>
-                  </Image>
-              </TouchableHighlight>
-        )
-    }
-
-    render() {
-        return (
-            <ListView
-                dataSource={this.props.dataSource}
-                renderRow={this.renderTour.bind(this)}
-            />
-        )
-    }
-}
-
-class yesteryearNative extends React.Component {
+class App extends React.Component {
 
     constructor(props) {
         super(props);
@@ -112,13 +75,4 @@ class yesteryearNative extends React.Component {
     }
 }
 
-
-
-let stylesTourDetail = StyleSheet.create({
-    heroImg: {
-        alignSelf: 'stretch',
-        height: 200
-    }
-})
-
-AppRegistry.registerComponent('yesteryearNative', () => yesteryearNative);
+AppRegistry.registerComponent('yesteryearNative', () => App);

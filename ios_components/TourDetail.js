@@ -4,7 +4,6 @@ var {
   Image,
   ListView,
   TouchableHighlight,
-  StyleSheet,
   Text,
   View,
 } = React;
