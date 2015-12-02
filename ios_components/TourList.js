@@ -28,7 +28,7 @@ class TourList extends React.Component {
 
     renderTour(tour) {
         return (
-              <TouchableHighlight onPress={this.goToDetail.bind(this, tour)} style={styles.backDrop, styles.listItemContainer}>
+              <TouchableHighlight onPress={this.goToDetail.bind(this, tour)} style={styles.backDrop, styles.listItemContainer} key={tour}>
                   <Image source={{uri: tour.image}} style={styles.backDropImage}>
                     <View style={styles.backdropView}>
                         <Text style={styles.title}>{tour.name}</Text>

@@ -8,7 +8,8 @@ var {
   View,
 } = React;
 
-import styles from './Styles.js';
+import stylesTourDetail from './StylesTourDetail.js';
+let styles = stylesTourDetail;
 
 class TourDetail extends React.Component {
 
@@ -28,22 +29,33 @@ class TourDetail extends React.Component {
 
     renderStop(stop) {
         return (
-            <TouchableHighlight style={styles.backDrop, styles.listItemContainer}>
-                <Image source={{uri: stop.image}} style={styles.backDropImage}>
-                  <View style={styles.backdropView}>
-                      <Text style={styles.title}>{stop.name}</Text>
-                  </View>
-                </Image>
+            <TouchableHighlight style={styles.touchable} key={stop.stopID} index={stop.stopID}>
+                <View style={styles.tourStopContainer}>
+                    <Image source={{uri: stop.image}} style={styles.stopImage}/>
+                      <View>
+                          <Text style={styles.stopName}>{stop.name}</Text>
+                      </View>
+                </View>
             </TouchableHighlight>
         )
     }
 
     render() {
         return (
-            <ListView
-                dataSource={this.state.dataSource}
-                renderRow={this.renderStop.bind(this)}
-            />
+            <View style={styles.detailWrap}>
+                <Image source={{uri: this.props.tour.image}} style={styles.tourDetailHeroImage}>
+                  <View style={styles.backdropView}>
+                      <Text style={styles.tourDetailTitle}>{this.props.tour.name}</Text>
+                      <Text style={styles.tourDetailSubtitle}>{this.props.tour.totalTime} minutes</Text>
+                      <Text style={styles.tourDetailSubtitle}>${this.props.tour.price}</Text>
+                  </View>
+                </Image>
+                <ListView
+                    dataSource={this.state.dataSource}
+                    renderRow={this.renderStop.bind(this)}
+                    automaticallyAdjustContentInsets={false}
+                />
+            </View>
         )
     }
 }

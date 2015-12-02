@@ -23,7 +23,7 @@ let styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     marginBottom: 10
-},
+  },
   backdropView: {
     alignSelf: 'stretch',
     backgroundColor: 'rgba(0,0,0,0)',
@@ -44,6 +44,7 @@ let styles = StyleSheet.create({
     textAlign: 'center'
   },
   tourItemSubtitle: {
+    color: 'white',
     textAlign: 'center'
   },
   mapIcon: {
@@ -59,7 +60,7 @@ let styles = StyleSheet.create({
     height: 120
   },
   wrapper: {
-      flex: 1
+    flex: 1
   }
 });
 
