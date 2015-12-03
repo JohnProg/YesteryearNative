@@ -2,13 +2,16 @@ import React from 'react-native';
 import RNFS  from 'react-native-fs';
 import Video from 'react-native-video';
 
-var {
+let {
   Image,
   ListView,
+  NativeModules,
   TouchableHighlight,
   Text,
   View,
 } = React;
+
+var { RNPlayAudio } = NativeModules;
 
 import stylesTourDetail from './StylesTourDetail.js';
 let styles = stylesTourDetail;
@@ -58,6 +61,19 @@ class TourStop extends React.Component {
         this.setState({
             player: 'playing'
         });
+
+        RNPlayAudio.startAudio(
+
+            "test.mp3", // filename
+
+            function errorCallback(results) {
+                console.log('JS Error: ' + results['errMsg']);
+
+            },
+            function successCallback(results) {
+                console.log('JS Success: ' + results['successMsg']);
+            }
+        );
     }
 
     _pause() {
@@ -65,6 +81,16 @@ class TourStop extends React.Component {
         this.setState({
             player: 'paused'
         });
+
+        RNPlayAudio.pauseAudio(
+            "test.mp3", // fileName
+            function errorCallback(results) {
+                console.log('JS Error: ' + results['errMsg']);
+            },
+            function successCallback(results) {
+                console.log('JS Success: ' + results['successMsg']);
+            }
+        );
     }
 
     _listAllFiles() {
@@ -150,20 +176,22 @@ class TourStop extends React.Component {
     }
 
     getTourStopFromInternet() {
-        let tourStopPath = RNFS.DocumentDirectoryPath + '/' + this.props.stop.stopID;
-        console.log(this.props.stop.audioURL, tourStopPath)
-        console.log(this.props)
+        let tourStopPath = RNFS.DocumentDirectoryPath + '/test.mp3';
         RNFS.downloadFile(this.props.stop.audioURL, tourStopPath)
             .then(response => {
                 this._loadEnded();
                 console.log(JSON.stringify(response))
             })
             .catch(error => console.log("error in downloading"))
-        this._listAllFiles();
+
+        console.log(tourStopPath);
+        RNFS.readFile(tourStopPath)
+            .then((data) => {console.log(data)})
+            .catch((err) => {console.log("error reading...")});
     }
 
     insertMedia() {
-            let filePath = '/Documents/' + this.props.stop.stopID;
+            let filePath = '/assets/' + this.props.stop.stopID;
             return (
                 <Video source={{uri: filePath }} // Can be a URL or a local file.
                    rate={1.0}                   // 0 is paused, 1 is normal.
