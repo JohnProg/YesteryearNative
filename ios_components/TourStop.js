@@ -1,6 +1,6 @@
 import React from 'react-native';
 import RNFS  from 'react-native-fs';
-import Video from 'react-native-video';
+import stylesTourDetail from './StylesTourDetail.js';
 
 let {
   Image,
@@ -13,7 +13,6 @@ let {
 
 var { RNPlayAudio } = NativeModules;
 
-import stylesTourDetail from './StylesTourDetail.js';
 let styles = stylesTourDetail;
 
 class TourStop extends React.Component {
@@ -31,14 +30,17 @@ class TourStop extends React.Component {
         this.setState({
             player: 'notloaded'
         })
-        this._listAllFiles();
-        this._loadInitialState().done();
+        this._loadInitialState();
     }
 
     _loadInitialState() {
-        return RNFS.readFile(RNFS.DocumentDirectoryPath + this.props.stop.stopID).then((data) => {
-          this.setState({ output: 'Contents: ' + data });
-      }).catch(err => console.log("some error"));
+        var testFilePath = RNFS.DocumentDirectoryPath + '/test.mp3';
+        RNFS.readFile(testFilePath, 'base64')
+        .then((data) => {
+          console.log("tour stop already downloaded");
+            this._loadEnded();
+          })
+        .catch(err => console.log("initially, nada here", err));
     }
 
     loadStart() {
@@ -46,7 +48,6 @@ class TourStop extends React.Component {
         this.setState({
             player: 'loading'
         });
-        this.insertMedia();
     }
 
     _loadEnded() {
@@ -62,13 +63,13 @@ class TourStop extends React.Component {
             player: 'playing'
         });
 
+        let myAudioFile = "test.mp3";
+
         RNPlayAudio.startAudio(
 
-            "test.mp3", // filename
-
+            myAudioFile, // filename
             function errorCallback(results) {
                 console.log('JS Error: ' + results['errMsg']);
-
             },
             function successCallback(results) {
                 console.log('JS Success: ' + results['successMsg']);
@@ -93,54 +94,6 @@ class TourStop extends React.Component {
         );
     }
 
-    _listAllFiles() {
-        RNFS.readDir(RNFS.MainBundlePath)
-          .then((result) => {
-            console.log('GOT RESULT', result);
-            // stat the first file
-            return Promise.all([RNFS.stat(result[0].path), result[0].path]);
-          })
-          .then((statResult) => {
-            if (statResult[0].isFile()) {
-              // if we have a file, read it
-              return RNFS.readFile(statResult[1], 'utf8');
-            }
-
-            return 'no file';
-          })
-          .then((contents) => {
-            // log the file contents
-            console.log(contents);
-          })
-          .catch((err) => {
-            console.log("error");
-          });
-
-          console.log("here comes docs: ");
-
-        RNFS.readDir(RNFS.DocumentDirectoryPath)
-          .then((result) => {
-            console.log('GOT RESULT', result);
-            // stat the first file
-            return Promise.all([RNFS.stat(result[0].path), result[0].path]);
-          })
-          .then((statResult) => {
-            if (statResult[0].isFile()) {
-              // if we have a file, read it
-              return RNFS.readFile(statResult[1], 'utf8');
-            }
-
-            return 'no file';
-          })
-          .then((contents) => {
-            // log the file contents
-            console.log(contents);
-          })
-          .catch((err) => {
-            console.log("error");
-          });
-    }
-
     renderPlayerIcon() {
         if (this.state.player === 'loading') {
             return (
@@ -156,7 +109,10 @@ class TourStop extends React.Component {
         }
         else if (this.state.player === 'notloaded') {
             return (
-                <Image source={require('../images/stop.png')} style={styles.stopImage}/>
+                <TouchableHighlight onPress={this.getTourStopFromInternet.bind(this)} style={styles.touchable}>
+                    <Image source={require('../images/stop.png')} style={styles.stopImage}/>
+                </TouchableHighlight>
+
             )
         }
         else if (this.state.player === 'playing') {
@@ -182,27 +138,7 @@ class TourStop extends React.Component {
                 this._loadEnded();
                 console.log(JSON.stringify(response))
             })
-            .catch(error => console.log("error in downloading"))
-
-        console.log(tourStopPath);
-        RNFS.readFile(tourStopPath)
-            .then((data) => {console.log(data)})
-            .catch((err) => {console.log("error reading...")});
-    }
-
-    insertMedia() {
-            let filePath = '/assets/' + this.props.stop.stopID;
-            return (
-                <Video source={{uri: filePath }} // Can be a URL or a local file.
-                   rate={1.0}                   // 0 is paused, 1 is normal.
-                   volume={1.0}                 // 0 is muted, 1 is normal.
-                   muted={false}               // Mutes the audio entirely.
-                   paused={ this.state.player === 'paused'}               // Pauses playback entirely.
-                   resizeMode="cover"           // Fill the whole screen at aspect ratio.
-                   repeat={false}
-                   onLoadStart={this.loadStart.bind(this)} // Callback when video starts to load
-                   style={styles.backgroundVideo} />
-            )
+            .catch(error => console.log("error in downloading"));
     }
 
     render() {
@@ -211,7 +147,6 @@ class TourStop extends React.Component {
                 <TouchableHighlight
                     key={this.props.stop.stopID}
                     index={this.props.stop.stopID}
-                    onPress={this.getTourStopFromInternet.bind(this)}
                     style={styles.touchable}>
                     <View style={styles.tourStopContainer}>
                         <Image source={{uri: this.props.stop.image}} style={styles.stopImage}/>
@@ -220,7 +155,6 @@ class TourStop extends React.Component {
                 </TouchableHighlight>
                 <View>
                     { this.renderPlayerIcon() }
-                    { (this.state.player !== 'notloaded') ? this.insertMedia() : null }
                 </View>
             </View>
         )
