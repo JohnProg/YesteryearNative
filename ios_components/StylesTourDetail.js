@@ -30,7 +30,10 @@ let stylesTourDetail = StyleSheet.create({
       paddingLeft: 20
   },
   player: {
-      alignSelf: "flex-end"
+    //   position: 'absolute',
+    //   right: 0,
+    //   top: 0,
+      width: 50
   },
   tourDetailHeroImage: {
     alignSelf: 'stretch',
@@ -66,7 +69,8 @@ let stylesTourDetail = StyleSheet.create({
       alignSelf: 'stretch',
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      position: 'relative'
   }
 });
 

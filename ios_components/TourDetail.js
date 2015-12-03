@@ -1,4 +1,5 @@
 var React = require('react-native');
+import Video from 'react-native-video';
 
 var {
   Image,
@@ -11,6 +12,8 @@ var {
 import stylesTourDetail from './StylesTourDetail.js';
 let styles = stylesTourDetail;
 
+import TourStop from './TourStop.js';
+
 class TourDetail extends React.Component {
 
     constructor() {
@@ -21,21 +24,16 @@ class TourDetail extends React.Component {
             })
         }
     }
+
     componentDidMount() {
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(this.props.tour.stops)
         })
     }
 
-    renderStop(stop) {
+    renderTourStop(stop) {
         return (
-            <TouchableHighlight style={styles.touchable} key={stop.stopID} index={stop.stopID}>
-                <View style={styles.tourStopContainer}>
-                    <Image source={{uri: stop.image}} style={styles.stopImage}/>
-                    <Text style={styles.stopName}>{stop.name}</Text>
-                    <Text style={styles.player}>{stop.name}</Text>
-                </View>
-            </TouchableHighlight>
+            <TourStop stop={stop}/>
         )
     }
 
@@ -51,7 +49,7 @@ class TourDetail extends React.Component {
                 </Image>
                 <ListView
                     dataSource={this.state.dataSource}
-                    renderRow={this.renderStop.bind(this)}
+                    renderRow={this.renderTourStop.bind(this)}
                     automaticallyAdjustContentInsets={false}
                 />
             </View>
