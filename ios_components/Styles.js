@@ -16,6 +16,13 @@ let styles = StyleSheet.create({
     marginTop: 50,
     color: 'black'
   },
+  backgroundVideo: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0
+  },
   listItemContainer: {
     alignItems: 'center',
     backgroundColor: '#F5FCFF',

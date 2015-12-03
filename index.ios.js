@@ -1,4 +1,5 @@
 import React from 'react-native';
+import Video from 'react-native-video';
 
 const {
   AppRegistry,
@@ -55,6 +56,14 @@ class App extends React.Component {
             <Text style={styles.loadingText}>
               Getting tours...
             </Text>
+            <Video source={{uri: "train"}} // Can be a URL or a local file.
+               rate={1.0}                   // 0 is paused, 1 is normal.
+               volume={0}                 // 0 is muted, 1 is normal.
+               muted={false}                // Mutes the audio entirely.
+               paused={false}               // Pauses playback entirely.
+               resizeMode="cover"           // Fill the whole screen at aspect ratio.
+               repeat={true}
+               style={styles.backgroundVideo} />
           </View>
         );
     }
