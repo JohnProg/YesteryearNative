@@ -32,9 +32,8 @@ class TourDetail extends React.Component {
             <TouchableHighlight style={styles.touchable} key={stop.stopID} index={stop.stopID}>
                 <View style={styles.tourStopContainer}>
                     <Image source={{uri: stop.image}} style={styles.stopImage}/>
-                      <View>
-                          <Text style={styles.stopName}>{stop.name}</Text>
-                      </View>
+                    <Text style={styles.stopName}>{stop.name}</Text>
+                    <Text style={styles.player}>{stop.name}</Text>
                 </View>
             </TouchableHighlight>
         )

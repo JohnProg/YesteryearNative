@@ -26,7 +26,11 @@ let stylesTourDetail = StyleSheet.create({
   },
   stopName: {
       flex: 2,
-      fontSize: 14
+      fontSize: 18,
+      paddingLeft: 20
+  },
+  player: {
+      alignSelf: "flex-end"
   },
   tourDetailHeroImage: {
     alignSelf: 'stretch',
@@ -49,7 +53,9 @@ let stylesTourDetail = StyleSheet.create({
   touchable: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    borderBottomColor: 'rgba(0,0,0,.3)',
+    borderBottomWidth: 2
   },
   tourDetailSubtitle: {
       fontSize: 16,
@@ -59,7 +65,8 @@ let stylesTourDetail = StyleSheet.create({
   tourStopContainer: {
       alignSelf: 'stretch',
       flexDirection: 'row',
-      alignItems: 'center'
+      alignItems: 'center',
+      justifyContent: 'space-between'
   }
 });
 
